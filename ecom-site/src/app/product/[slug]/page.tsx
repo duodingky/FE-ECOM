@@ -1,0 +1,53 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { AddToCartButton } from "@/components/products/AddToCartButton";
+import { formatPriceUSD, getProductBySlug } from "@/lib/catalog";
+
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const product = getProductBySlug(slug);
+  if (!product) notFound();
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="text-sm text-zinc-600">
+        <Link href="/" className="hover:underline">
+          Home
+        </Link>{" "}
+        /{" "}
+        <Link href={`/category/${product.categorySlug}`} className="hover:underline">
+          {product.categorySlug}
+        </Link>{" "}
+        / Product
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-100 to-zinc-200" />
+
+        <div className="flex flex-col gap-3">
+          <h1 className="text-3xl font-semibold tracking-tight">{product.name}</h1>
+          <div className="text-lg font-semibold">{formatPriceUSD(product.priceCents)}</div>
+          <p className="text-zinc-700">{product.description}</p>
+
+          <div className="pt-2">
+            <AddToCartButton productId={product.id} inStock={product.inStock} />
+          </div>
+
+          <div className="mt-4 rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-zinc-900">Availability</span>
+              <span className={product.inStock ? "text-emerald-700" : "text-zinc-500"}>
+                {product.inStock ? "In stock" : "Out of stock"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
