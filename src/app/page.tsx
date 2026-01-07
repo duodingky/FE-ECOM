@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
-import { getAllProducts, getCategories } from "@/lib/catalog";
+import { CategoriesList } from "@/components/products/CategoriesList";
+import {getFeaturedProducts} from "@/lib/API/products"
 
-export default function Home() {
-  const categories = getCategories();
-  const featured = getAllProducts().slice(0, 6);
-
+export default async function Home() {
+  const featured = await getFeaturedProducts()
   return (
     <div className="flex flex-col gap-10">
       <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
@@ -18,21 +17,22 @@ export default function Home() {
               Browse categories, search products, and add items to your cart.
             </p>
             <div className="flex flex-wrap gap-2 pt-2">
-              {categories.map((c) => (
-                <Link
-                  key={c.slug}
-                  href={`/category/${c.slug}`}
-                  className="inline-flex h-9 items-center rounded-md border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-800 hover:bg-zinc-50"
-                >
-                  {c.name}
-                </Link>
-              ))}
+              
             </div>
           </div>
           <div className="aspect-[16/10] rounded-xl bg-gradient-to-br from-zinc-900 via-zinc-700 to-zinc-400" />
         </div>
       </section>
+      <section className="flex flex-col gap-4">
+         <div className="flex items-end justify-between gap-4">
+          <h2 className="text-xl font-semibold tracking-tight">Categories</h2>
+          <Link href="/categories" className="text-sm font-medium text-zinc-700 hover:underline">
+            Browse all Categories
+          </Link>
+        </div>
+        <CategoriesList parent="0" />
 
+      </section>
       <section className="flex flex-col gap-4">
         <div className="flex items-end justify-between gap-4">
           <h2 className="text-xl font-semibold tracking-tight">Featured products</h2>

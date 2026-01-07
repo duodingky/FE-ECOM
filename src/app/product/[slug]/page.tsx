@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
-import { formatPriceUSD, getProductBySlug } from "@/lib/catalog";
-
+import { getProducts} from "@/lib/API/products";
 export default async function ProductPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProducts(slug)
+
   if (!product) notFound();
 
   return (
@@ -19,8 +19,8 @@ export default async function ProductPage({
           Home
         </Link>{" "}
         /{" "}
-        <Link href={`/category/${product.categorySlug}`} className="hover:underline">
-          {product.categorySlug}
+        <Link href={`/category/${product.categoryName}`} className="hover:underline">
+          {product.categoryName}
         </Link>{" "}
         / Product
       </div>
@@ -29,9 +29,9 @@ export default async function ProductPage({
         <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-100 to-zinc-200" />
 
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-semibold tracking-tight">{product.name}</h1>
-          <div className="text-lg font-semibold">{formatPriceUSD(product.priceCents)}</div>
-          <p className="text-zinc-700">{product.description}</p>
+          <h1 className="text-3xl font-semibold tracking-tight">{product.productName}</h1>
+          <div className="text-lg font-semibold">{product.price}</div>
+          <p className="text-zinc-700">{product.shortDesc}</p>
 
           <div className="pt-2">
             <AddToCartButton productId={product.id} inStock={product.inStock} />
