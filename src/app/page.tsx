@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
 import { CategoriesList } from "@/components/products/CategoriesList";
 import {getFeaturedProducts} from "@/lib/API/products"
+import { ImageCarousel } from "@/components/home/ImageCarousel";
 
 export default async function Home() {
   const featured = await getFeaturedProducts()
@@ -20,7 +21,7 @@ export default async function Home() {
               
             </div>
           </div>
-          <div className="aspect-[16/10] rounded-xl bg-gradient-to-br from-zinc-900 via-zinc-700 to-zinc-400" />
+          <ImageCarousel />
         </div>
       </section>
       <section className="flex flex-col gap-4">
