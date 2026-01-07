@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
+import Image from 'next/image'
 
 function NavLink({
   href,
@@ -40,7 +41,12 @@ export function Header() {
     <header className="border-b border-zinc-200 bg-white">
       <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
         <Link href="/" className="mr-2 text-base font-semibold tracking-tight">
-          FE-ECOM
+            <Image
+              src="/images/logo.png"
+              width={300}
+              height={50}
+              alt="Dingky's store"
+         />
         </Link>
 
         <nav className="hidden items-center gap-1 sm:flex">
