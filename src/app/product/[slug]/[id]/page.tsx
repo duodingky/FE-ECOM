@@ -2,13 +2,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
 import { getProducts} from "@/lib/API/products";
+
+
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string , id: string}>;
 }) {
-  const { slug } = await params;
-  const product = await getProducts(slug)
+   const { id } = await params;
+  const product = await getProducts(id);
+  console.log('product : ',product)
 
   if (!product) notFound();
 
@@ -19,8 +22,8 @@ export default async function ProductPage({
           Home
         </Link>{" "}
         /{" "}
-        <Link href={`/category/${product.categoryName}`} className="hover:underline">
-          {product.categoryName}
+        <Link href={`/category/${product[0].categoryName}`} className="hover:underline">
+          {product[0].categoryName}
         </Link>{" "}
         / Product
       </div>
@@ -29,20 +32,17 @@ export default async function ProductPage({
         <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-100 to-zinc-200" />
 
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-semibold tracking-tight">{product.productName}</h1>
-          <div className="text-lg font-semibold">{product.price}</div>
-          <p className="text-zinc-700">{product.shortDesc}</p>
+          <h1 className="text-3xl font-semibold tracking-tight">{product[0].productName}</h1>
+          <div className="text-lg font-semibold">{product[0].price}</div>
+          <p className="text-zinc-700">{product[0].shortDesc}</p>
 
           <div className="pt-2">
-            <AddToCartButton productId={product.id} inStock={product.inStock} />
+            <AddToCartButton productId={product[0].id} />
           </div>
 
           <div className="mt-4 rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
             <div className="flex items-center justify-between">
               <span className="font-medium text-zinc-900">Availability</span>
-              <span className={product.inStock ? "text-emerald-700" : "text-zinc-500"}>
-                {product.inStock ? "In stock" : "Out of stock"}
-              </span>
             </div>
           </div>
         </div>
