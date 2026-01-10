@@ -4,6 +4,9 @@ import "./globals.css";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+
+import { Suspense } from "react";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,7 +34,10 @@ export default function RootLayout({
       >
         <CartProvider>
           <div className="min-h-dvh">
-            <Header />
+            <Suspense fallback={<div>Loading header...</div>}>
+              <Header />
+           </Suspense>
+
             <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
               {children}
             </main>

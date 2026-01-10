@@ -36,5 +36,5 @@ export async function fetchApi<T>(
       `API request failed: ${res.status} ${res.statusText} (${url.toString()})${body ? ` - ${body}` : ""}`,
     );
   }
-  return await res.json() as APiResponse;
+  return await res.json() as  APiResponse;
 }

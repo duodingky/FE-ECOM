@@ -1,8 +1,11 @@
+// app/cart/page.tsx
+import { Suspense } from "react";
  
-export default async function SearchPage() {
+
+export default function CartPage() {
   return (
-    <div className="flex flex-col gap-6">
-       Cart Here
-    </div>
+    <Suspense fallback={<div>Loading cart...</div>}>
+       cart  here...
+    </Suspense>
   );
 }
