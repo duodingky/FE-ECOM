@@ -2,27 +2,39 @@ import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
 import { CategoriesList } from "@/components/products/CategoriesList";
 import {getFeaturedProducts} from "@/lib/API/products"
+import {getHomeBanner} from "@/lib/API/homePageBanner"
 import { ImageCarousel } from "@/components/home/ImageCarousel";
+import Image from 'next/image'
 
 export default async function Home() {
   const featured = await getFeaturedProducts()
+  const banners = await getHomeBanner()
+
+   const NumProductEmptyBox = 3 - featured.length  % 3;
+  
+    const renderEmptyProductBoxes =(count: number) => {
+    const boxes = [];
+    for (let i = 0; i < count; i++) {
+      boxes.push(<div key={i}>
+        <div>
+           <Image
+              src="/images/emptyProduct.png"
+              width={350}
+              height={500}
+              alt="empty product"
+          />
+        </div>
+      </div>)
+      return boxes;
+    }
+  }
   return (
     <div className="flex flex-col gap-10">
       <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
-        <div className="grid gap-6 p-8 md:grid-cols-2 md:items-center">
-          <div className="flex flex-col gap-3">
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Simple e-commerce starter
-            </h1>
-            <p className="text-zinc-600">
-              Browse categories, search products, and add items to your cart.
-            </p>
-            <div className="flex flex-wrap gap-2 pt-2">
-              
-            </div>
-          </div>
-          <ImageCarousel />
+        <div className="grid gap-6 p-8 ">
+          <ImageCarousel data={banners} strapiBaseUrl={process.env.STRAPI_API_BASE_URL ??'' } />
         </div>
+     
       </section>
       <section className="flex flex-col gap-4">
          <div className="flex items-end justify-between gap-4">
@@ -45,6 +57,8 @@ export default async function Home() {
           {featured.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
+          
+          {renderEmptyProductBoxes(NumProductEmptyBox)}
         </div>
       </section>
     </div>

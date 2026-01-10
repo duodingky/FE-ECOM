@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
-import { getCategoryBySlug, getProductsByCategorySlug } from "@/lib/catalog";
 import { notFound } from "next/navigation";
 
 export default function CategoryPage({
@@ -20,10 +19,9 @@ async function CategoryPageInner({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
-  if (!category) notFound();
+ 
 
-  const products = getProductsByCategorySlug(slug);
+ 
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,25 +30,20 @@ async function CategoryPageInner({
           <Link href="/" className="hover:underline">
             Home
           </Link>{" "}
-          / Category
+          / Category 
+          / {slug}
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight">{category.name}</h1>
-        {category.description ? (
-          <p className="text-zinc-600">{category.description}</p>
-        ) : null}
+        <h1 className="text-2xl font-semibold tracking-tight">{slug}</h1>
+       
       </div>
-
-      {products.length ? (
+    
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
+           Product List Here
         </div>
-      ) : (
+        
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-zinc-700">
-          No products found in this category.
+           template if no product No products found in this category.
         </div>
-      )}
     </div>
   );
 }

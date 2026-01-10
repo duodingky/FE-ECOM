@@ -12,22 +12,28 @@ function getAapiBaseUrl(): string {
 
 export async function fetchApi<T>(
   path: string,
+  baseUrl?: string,
+  hasAuth: boolean = true
 ): Promise<APiResponse> {
-  const base = getAapiBaseUrl();
+  const base = baseUrl ?? getAapiBaseUrl();
   const url = new URL(path, `${base}/`);
+  // Define headers type
+  const headers: Record<string, string> = {
+    accept: "application/json",
+  };
+
+  if (hasAuth) {
+    headers["Authorization"] = `Bearer ${process.env.API_TOKEN}`;
+  }
 
   const res = await fetch(url, {
-    headers: {
-      accept: "application/json",
-      Authorization: 'Bearer ' + process.env.API_TOKEN,
-
-    },
+    headers
   });
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
     throw new Error(
-      `FF API request failed: ${res.status} ${res.statusText} (${url.toString()})${body ? ` - ${body}` : ""}`,
+      `API request failed: ${res.status} ${res.statusText} (${url.toString()})${body ? ` - ${body}` : ""}`,
     );
   }
   return await res.json() as APiResponse;

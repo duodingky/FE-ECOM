@@ -2,13 +2,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/products/AddToCartButton";
 import { getProducts} from "@/lib/API/products";
+
+
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string , id: string}>;
 }) {
   const { slug } = await params;
-  const product = await getProducts(slug)
+   const { id } = await params;
+  const product = await getProducts(id);
+  console.log('product : ',id,product)
 
   if (!product) notFound();
 
@@ -34,15 +38,12 @@ export default async function ProductPage({
           <p className="text-zinc-700">{product.shortDesc}</p>
 
           <div className="pt-2">
-            <AddToCartButton productId={product.id} inStock={product.inStock} />
+            <AddToCartButton productId={product.id} />
           </div>
 
           <div className="mt-4 rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
             <div className="flex items-center justify-between">
               <span className="font-medium text-zinc-900">Availability</span>
-              <span className={product.inStock ? "text-emerald-700" : "text-zinc-500"}>
-                {product.inStock ? "In stock" : "Out of stock"}
-              </span>
             </div>
           </div>
         </div>

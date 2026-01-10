@@ -52,7 +52,7 @@ export function Header() {
         <nav className="hidden items-center gap-1 sm:flex">
           <NavLink href="/">Home</NavLink>
           <NavLink href="/search">Search</NavLink>
-          <NavLink href="/cart">Cart</NavLink>
+          <NavLink href="/categories">Categories</NavLink>
         </nav>
 
         <form

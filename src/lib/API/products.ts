@@ -9,6 +9,6 @@ export async function getFeaturedProducts(): Promise<pProducts[]> {
 
 export async function getProducts(id:string): Promise<pProducts[]> {
     const result =  await fetchApi("/products/" + id);
-    return result.data;
+    return  result.data ?? result
 }
   
