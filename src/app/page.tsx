@@ -43,7 +43,7 @@ export default async function Home() {
             Browse all Categories
           </Link>
         </div>
-        <CategoriesList parent="0" />
+        <CategoriesList parent="0"  includeChildren={false}/>
 
       </section>
       <section className="flex flex-col gap-4">

@@ -12,4 +12,8 @@ export async function getProducts(id: string): Promise<pProducts[]> {
   return result.data ?? [result];
 }
 
+export async function getProductsByCategory(id: string): Promise<pProducts[]> {
+  const result = await fetchApi("/products/getByCategory/" + id);
+  return result.data;
+}
   

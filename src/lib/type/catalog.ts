@@ -3,8 +3,17 @@ export type pCategory = Record<string, unknown> & {
   categoryName: string;
   imageUrl: string;
   parentId: string;
+  children: []
 };
 
+
+export type Category = {
+  id?: string | number;
+  categoryName: string;
+  imageUrl: string;
+  parentId: string;
+  children: []
+};
 export type pProducts= {
   id: string;
   productName: string;
