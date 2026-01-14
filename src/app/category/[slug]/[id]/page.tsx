@@ -15,7 +15,6 @@ export default async function CategoryPage({
 
   const { id }  = await params;
   const categories =  await getCategories(id??"0",true);
- console.log('ID: ',id??"0")
   if(!categories) notFound()
   const cname = Array.isArray(categories) ? categories[0]?.categoryName : categories.categoryName
   const products =  await getProductsByCategory(id);

@@ -1,8 +1,9 @@
 "use client";
-
+import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useMemo, useState, useEffect } from "react";
 import type { HomePageBanners } from "@/lib/type/catalog";
+
 
 type Props = {
   data: HomePageBanners[];
@@ -36,7 +37,7 @@ export function ImageCarousel({ data, strapiBaseUrl }: Props) {
     }, 3000); // change slide every 3s
     return () => clearInterval(interval);
   }, [goNext, isPaused]);
-
+ 
   return (
     <section
       aria-roledescription="carousel"
@@ -53,14 +54,17 @@ export function ImageCarousel({ data, strapiBaseUrl }: Props) {
         style={{ transform: `translateX(-${index * 100}%)` }}
       >
         {safeSlides.map((slide) => (
+  
           <div key={slide.id} className="relative h-full w-full shrink-0">
-            <Image
-              src={strapiBaseUrl + slide.bannerImg.formats.large.url}
-              alt={slide.shortDesc}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 560px"
-            />
+            <Link href={slide.link} >
+              <Image
+                src={strapiBaseUrl + slide.bannerImg.formats.large.url}
+                alt={slide.shortDesc}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 560px"
+              />
+            </Link>
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/25 p-4 bg-black/40">
               <p className="mt-1 text-xs text-white/90 sm:text-sm">
                 {slide.shortDesc}
