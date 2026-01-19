@@ -4,7 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-
+import Providers from './providers';
 import { Suspense } from "react";
 
 const geistSans = Geist({
@@ -32,18 +32,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-zinc-50 text-zinc-950 antialiased`}
       >
-        <CartProvider>
-          <div className="min-h-dvh">
-            <Suspense fallback={<div>Loading header...</div>}>
-              <Header />
-           </Suspense>
+       <Providers>
+          <CartProvider>
+            <div className="min-h-dvh">
+              <Suspense fallback={<div>Loading header...</div>}>
+                <Header />
+            </Suspense>
 
-            <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-              {children}
-            </main>
-          </div>
-          <Footer/>
-        </CartProvider>
+              <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+                {children}
+              </main>
+            </div>
+            <Footer/>
+          </CartProvider>
+      </Providers>
       </body>
     </html>
   );

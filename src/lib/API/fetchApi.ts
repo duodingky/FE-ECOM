@@ -30,6 +30,8 @@ export async function fetchApi<T>(
     headers
   });
 
+  console.log('API Request URL:', url.toString(),headers);
+
   if (!res.ok) {
     const body = await res.text().catch(() => "");
     throw new Error(
