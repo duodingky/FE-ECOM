@@ -10,7 +10,41 @@ function getAapiBaseUrl(): string {
   return raw.replace(/\/+$/, "");
 }
 
-export async function fetchApi<T>(
+export async function fetchApiGet<T>(
+  path: string,
+  baseUrl?: string,
+  hasAuth: boolean = true
+): Promise<APiResponse> {
+  const base = baseUrl ?? getAapiBaseUrl();
+  const url = new URL(path, `${base}/`);
+  // Define headers type
+  const headers: Record<string, string> = {
+    accept: "application/json",
+  };
+
+  if (hasAuth) {
+    headers["Authorization"] = `Bearer ${process.env.API_TOKEN}`;
+  }
+
+  const res = await fetch(url, {
+    headers
+  });
+
+  console.log('API Request URL:', url.toString(),headers);
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(
+      `API request failed: ${res.status} ${res.statusText} (${url.toString()})${body ? ` - ${body}` : ""}`,
+    );
+  }
+  return await res.json() as  APiResponse;
+}
+
+
+
+
+export async function fetchApiPost<T>(
   path: string,
   baseUrl?: string,
   hasAuth: boolean = true

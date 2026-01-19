@@ -42,9 +42,10 @@ export type HomePageBanners= {
   bannerImg: BannerImg;
 };
 
-export type Brand = {
+export type pBrand = {
   id: string;
   link: string;
+  brandName : string;
   shortDesc : string;
   bannerImg: BannerImg;
 };
