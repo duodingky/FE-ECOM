@@ -1,7 +1,7 @@
-import { fetchApi } from "@/lib/API/fetchApi";
-import type { Brand } from "@/lib/type/catalog";
+import { fetchApiGet } from "@/lib/API/fetchApi";
+import type { pBrand } from "@/lib/type/catalog";
 
-export async function getBrands(): Promise<Brand[]> {
-  const result = await fetchApi("/brands");
+export async function getBrands(): Promise<pBrand[]> {
+  const result = await fetchApiGet("/brands");
   return result.data;
 }

@@ -86,5 +86,5 @@ export async function POST(request: Request) {
   }
 
   const result = await res.json();
-  return Response.json(result, { status: res.status });
+  return Response.json(result.data, { status: res.status });
 }
