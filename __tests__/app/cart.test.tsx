@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import CartPage from "@/app/cart/page";
 
 describe("Cart page", () => {
