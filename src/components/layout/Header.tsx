@@ -60,7 +60,7 @@ export function Header() {
           onSubmit={(e) => {
             e.preventDefault();
             const next = q.trim();
-            router.push(next ? `/search/${encodeURIComponent(next)}` : "/search");
+            router.push(next ? `/search?q=${encodeURIComponent(next)}` : "/search");
           }}
         >
           <input

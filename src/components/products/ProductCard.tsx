@@ -28,9 +28,10 @@ export function ProductCard({ product }: { product: pProducts }) {
             {product.productName}
           </Link>
           <div className="text-sm font-semibold text-zinc-900">
-            {product.price}
+            {product.price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
         </div>
+        <p className="line-clamp-2 text-sm text-zinc-600">{product.brandName}</p>
         <p className="line-clamp-2 text-sm text-zinc-600">{product.shortDesc}</p>
 
         <div className="mt-auto flex items-center gap-2 pt-2">
