@@ -1,8 +1,9 @@
  
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import { BrandsFilter } from "@/components/products/BrandsFilter";
 import { ProductCard } from "@/components/products/ProductCard";
-import type { pBrand, pProducts } from "@/lib/type/catalog";
+import type { pProducts } from "@/lib/type/catalog";
 
 
 export default  function SearchPage() {
@@ -45,9 +46,7 @@ export default  function SearchPage() {
 
       <div className="grid grid-cols-4 gap-4">
         <div className="bg-green-300 p-4"> 
-          {!isLoading &&  brands?.map((brand:pBrand) => (
-            <div key={brand.id}>{brand.brandName}</div>
-          ))}
+          {!isLoading && <BrandsFilter brands={brands ?? []} />}
           {isLoading && <div>Loading...</div>}
           {error && <div>Error loading brands</div>}
         </div> 
