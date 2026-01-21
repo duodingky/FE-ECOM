@@ -61,7 +61,7 @@ export default function SearchPage() {
     };
     
     const { data: products, error:errorSearch, isLoading:loadingSearch , refetch } = useQuery({
-     queryKey: ["searchProducts"],  
+     queryKey: ["searchProducts"+q.replaceAll(" ","_")], // unique key for caching
      queryFn: searchProduct,  
      enabled: false
   });
@@ -73,7 +73,6 @@ export default function SearchPage() {
         setQ( searchParams.get("q") ?? "" );
         refetch();
      }
-    
   }, [q, searchParams]); 
 
   
