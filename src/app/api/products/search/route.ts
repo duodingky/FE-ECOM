@@ -1,3 +1,6 @@
+import { fetchApiPost } from "@/lib/API/fetchApi";
+
+
 type ProductSearchPayload = {
   q?: string;
   category?: string[];
@@ -45,7 +48,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const hasQuery = typeof q === "string" && q.trim().length > 0;
+  const hasQuery = typeof q === "string" && q.trim().length >= 0;
   const hasCategory = Array.isArray(category) && category.length > 0;
   const hasBrand = Array.isArray(brand) && brand.length > 0;
 

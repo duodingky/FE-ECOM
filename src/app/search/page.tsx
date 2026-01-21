@@ -4,7 +4,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { ProductCard } from "@/components/products/ProductCard";
 import { CategoryTreeCheckBox  } from "@/components/products/CategoryTreeCheckBox";
-import type { pBrand, pProducts, Category } from "@/lib/type/catalog";
+import { BrandFilterCheckBox } from "@/components/products/BrandFilterCheckBox";
+import type { pProducts, Category } from "@/lib/type/catalog";
 import {  useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -49,6 +50,7 @@ export default function SearchPage() {
   });
 
   const categoryTree = Array.isArray(categories) ? categories : [];
+  const brandList = Array.isArray(brands) ? brands : [];
   const  searchProduct = async () => {
       try {
         const  params= {q: searchParams.get("q") ?? "" };
@@ -87,11 +89,11 @@ export default function SearchPage() {
           
            <h2 className="text-lg font-semibold">Brand</h2> 
             <div className="mt-3 space-y-3">
-                {!brandsLoading &&  brands?.map((brand:pBrand) => (
-                  <div key={brand.id}>{brand.brandName}</div>
-                ))}
-                {brandsLoading && <div>Loading...</div>}
-                {brandsError && <div>Error loading brands</div>}
+              {brandsLoading && <div>Loading...</div>}
+              {brandsError && <div>Error loading brands</div>}
+              {!brandsLoading && !brandsError && (
+                <BrandFilterCheckBox brands={brandList} />
+              )}
            </div>
 
             <h2 className="text-lg font-semibold">Catgories</h2>
