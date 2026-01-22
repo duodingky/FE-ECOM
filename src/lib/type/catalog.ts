@@ -16,6 +16,7 @@ export type Category = {
 };
 export type pProducts= {
   id: string;
+  sku?: string;
   productName: string;
   categoryName : string;
   brandName: string;

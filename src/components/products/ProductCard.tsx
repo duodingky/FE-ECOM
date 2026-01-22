@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import {  type pProducts } from "@/lib/type/catalog";
-import { useCart } from "@/components/cart/CartProvider";
-import Image from 'next/image'
+import Image from "next/image";
+import { type pProducts } from "@/lib/type/catalog";
+import { AddToCartButton } from "@/components/products/AddToCartButton";
 
 export function ProductCard({ product }: { product: pProducts }) {
-  const { add } = useCart();
-
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white">
   
@@ -41,18 +39,12 @@ export function ProductCard({ product }: { product: pProducts }) {
           >
             View
           </Link>
-          <button
-            type="button"
-            onClick={() => add(product.id, 1)}
-            className={[
-              "inline-flex h-9 flex-1 items-center justify-center rounded-md px-3 text-sm font-medium",
-              true 
-                ? "bg-zinc-900 text-white hover:bg-zinc-800"
-                : "cursor-not-allowed bg-zinc-200 text-zinc-500",
-            ].join(" ")}
-          >
-            Add to cart 
-          </button>
+          <AddToCartButton
+            productId={product.id}
+            productName={product.productName}
+            sku={product.sku ?? product.id}
+            size="sm"
+          />
         </div>
       </div>
     </div>
