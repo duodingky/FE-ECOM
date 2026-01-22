@@ -42,7 +42,6 @@ export function ProductCard({ product }: { product: pProducts }) {
           <AddToCartButton
             productId={product.id}
             productName={product.productName}
-            sku={product.sku ?? product.id}
             size="sm"
           />
         </div>

@@ -40,7 +40,6 @@ export default async function ProductPage({
             <AddToCartButton
               productId={product[0].id}
               productName={product[0].productName}
-              sku={product[0].sku ?? product[0].id}
             />
           </div>
 

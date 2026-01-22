@@ -7,7 +7,6 @@ import { useToast } from "@/components/feedback/ToastProvider";
 type AddToCartButtonProps = {
   productId: string;
   productName: string;
-  sku: string;
   size?: "sm" | "lg";
 };
 
@@ -16,7 +15,6 @@ const DISABLE_DURATION_MS = 3000;
 export function AddToCartButton({
   productId,
   productName,
-  sku,
   size = "lg",
 }: AddToCartButtonProps) {
   const { add } = useCart();
@@ -37,7 +35,7 @@ export function AddToCartButton({
     add(productId, 1);
     addToast({
       title: "Added to cart",
-      description: `${productName} - SKU ${sku}`,
+      description: productName,
     });
     setIsDisabled(true);
     timeoutRef.current = window.setTimeout(() => {
