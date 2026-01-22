@@ -5,6 +5,7 @@ type ProductSearchPayload = {
   q?: string;
   category?: string[];
   brand?: string[];
+  ids?: string[];
 };
 
 function getApiBaseUrl(): string {
