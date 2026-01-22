@@ -52,7 +52,7 @@ export default function CartPage() {
     const load = async () => {
       setStatus("loading");
       try {
-        const res = await fetch("/api/products", {
+        const res = await fetch("/api/products/search", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ ids: productIds }),

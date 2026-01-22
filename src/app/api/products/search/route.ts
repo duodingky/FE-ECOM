@@ -28,36 +28,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { q, category, brand } = payload ?? {};
-
-  if (q !== undefined && typeof q !== "string") {
-    return Response.json({ error: "q must be a string." }, { status: 400 });
-  }
-
-  if (category !== undefined && !isStringArray(category)) {
-    return Response.json(
-      { error: "category must be an array of strings." },
-      { status: 400 },
-    );
-  }
-
-  if (brand !== undefined && !isStringArray(brand)) {
-    return Response.json(
-      { error: "brand must be an array of strings." },
-      { status: 400 },
-    );
-  }
-
-  const hasQuery = typeof q === "string" && q.trim().length >= 0;
-  const hasCategory = Array.isArray(category) && category.length > 0;
-  const hasBrand = Array.isArray(brand) && brand.length > 0;
-
-  if (!hasQuery && !hasCategory && !hasBrand) {
-    return Response.json(
-      { error: "At least one of q, category, or brand is required." },
-      { status: 400 },
-    );
-  }
+  const { q, category, brand, ids } = payload ?? {};
 
   const base = getApiBaseUrl();
   const url = new URL("/products/search", `${base}/`);
@@ -73,7 +44,7 @@ export async function POST(request: Request) {
   const res = await fetch(url, {
     method: "POST",
     headers,
-    body: JSON.stringify({ q, category, brand }),
+    body: JSON.stringify({ q, category, brand, ids }),
   });
 
   if (!res.ok) {
