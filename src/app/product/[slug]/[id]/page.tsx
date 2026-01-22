@@ -37,7 +37,11 @@ export default async function ProductPage({
           <p className="text-zinc-700">{product[0].shortDesc}</p>
 
           <div className="pt-2">
-            <AddToCartButton productId={product[0].id} />
+            <AddToCartButton
+              productId={product[0].id}
+              productName={product[0].productName}
+              sku={product[0].sku ?? product[0].id}
+            />
           </div>
 
           <div className="mt-4 rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">

@@ -1,7 +1,8 @@
 "use client"; // Required because QueryClientProvider uses React Context
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+import { ToastProvider } from "@/components/feedback/ToastProvider";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   // We use useState to ensure the QueryClient is only created once
@@ -9,7 +10,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <ToastProvider>{children}</ToastProvider>
     </QueryClientProvider>
   );
 }
