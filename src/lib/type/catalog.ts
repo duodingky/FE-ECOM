@@ -14,6 +14,7 @@ export type Category = {
   parentId: string;
   children: []
 };
+
 export type pProducts= {
   id: string;
   sku?: string;
@@ -49,4 +50,21 @@ export type pBrand = {
   brandName : string;
   shortDesc : string;
   bannerImg: BannerImg;
+};
+
+export type CartProducts= {
+    amount: number ;
+    brandId:string
+    brandName: string;  
+    categoryId: string;
+    categoryName: string;
+    id  :number;  
+    price: number;
+    productId: string;
+    productName : string;
+    quantity: number;
+    sku: string;
+    unitPrice: number
+    shortDesc: string;
+    imageUrl: string;
 };

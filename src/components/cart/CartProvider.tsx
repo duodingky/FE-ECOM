@@ -1,73 +1,64 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { CART_STORAGE_KEY, getCartCount, safeParseCart, type StoredCart } from "@/lib/cart";
+import { CART_STORAGE_KEY,CART_ORDERID_KEY, safeParseCart, CART_COUNT_KEY, type StoredCart, additemIncart } from "@/lib/cart";
 
 type CartContextValue = {
-  cart: StoredCart;
   count: number;
+  orderId: string;
   add: (productId: string, quantity?: number) => void;
-  remove: (productId: string) => void;
-  setQuantity: (productId: string, quantity: number) => void;
+  setQuantity: ( quantity: number) => void;
   clear: () => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-function persistCart(cart: StoredCart) {
+
+function persistCart(orderId: string = "", cartCount: number = 0) {
   try {
-    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    window.localStorage.setItem(CART_ORDERID_KEY, orderId);
+    window.localStorage.setItem(CART_COUNT_KEY, cartCount.toString());
   } catch {
     // ignore write errors
   }
 }
 
+ 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<StoredCart>({});
+  const [count, setCount] = useState<number>(0);
+  const [orderId, setOrderId] = useState<string>('');
 
   useEffect(() => {
-    const initial = safeParseCart(
-      typeof window !== "undefined" ? window.localStorage.getItem(CART_STORAGE_KEY) : null,
-    );
-    setCart(initial);
-  }, []);
-
-  useEffect(() => {
-    persistCart(cart);
-  }, [cart]);
+    const OldOOrderId =  window.localStorage.getItem(CART_ORDERID_KEY) || '';
+    persistCart(OldOOrderId, count);
+    if(OldOOrderId!=='' && orderId===''){
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setOrderId(OldOOrderId);
+    }
+  }, [orderId, count]);
 
   const value = useMemo<CartContextValue>(() => {
     return {
-      cart,
-      count: getCartCount(cart),
-      add(productId, quantity = 1) {
-        setCart((prev) => {
-          const nextQty = (prev[productId] ?? 0) + Math.max(1, Math.floor(quantity));
-          return { ...prev, [productId]: nextQty };
-        });
+      count:count,
+      orderId,
+      async add(productId, quantity = 1) {
+         const newOrderId=  await additemIncart({id:productId, qty:quantity}, orderId);
+          setCount((prev) => prev + quantity);
+          if(orderId===''){
+              setOrderId(newOrderId);
+              persistCart(newOrderId, quantity + count);
+          } 
       },
-      remove(productId) {
-        setCart((prev) => {
-          if (!(productId in prev)) return prev;
-          const { [productId]: _, ...rest } = prev;
-          return rest;
-        });
-      },
-      setQuantity(productId, quantity) {
-        const q = Math.floor(quantity);
-        setCart((prev) => {
-          if (q <= 0) {
-            const { [productId]: _, ...rest } = prev;
-            return rest;
-          }
-          return { ...prev, [productId]: q };
-        });
+      setQuantity(quantity) {
+          setCount((prev) => prev + quantity);
       },
       clear() {
-        setCart({});
-      },
+          setCount(0);
+          setOrderId('');
+          persistCart('', 0);
+      }
     };
-  }, [cart]);
+  }, [count, orderId]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

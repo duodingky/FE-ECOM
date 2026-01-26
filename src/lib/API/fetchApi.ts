@@ -17,7 +17,6 @@ export async function fetchApiGet<T>(
 ): Promise<APiResponse> {
   const base = baseUrl ?? getAapiBaseUrl();
   const url = new URL(path, `${base}/`);
-  // Define headers type
   const headers: Record<string, string> = {
     accept: "application/json",
   };
@@ -29,8 +28,6 @@ export async function fetchApiGet<T>(
   const res = await fetch(url, {
     headers
   });
-
-  console.log('API Request URL:', url.toString(),headers);
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
@@ -41,30 +38,29 @@ export async function fetchApiGet<T>(
   return await res.json() as  APiResponse;
 }
 
-
-
-
 export async function fetchApiPost<T>(
   path: string,
+  params:  object,
   baseUrl?: string,
   hasAuth: boolean = true
 ): Promise<APiResponse> {
   const base = baseUrl ?? getAapiBaseUrl();
   const url = new URL(path, `${base}/`);
-  // Define headers type
   const headers: Record<string, string> = {
-    accept: "application/json",
+    "accept": "application/json",
+    "Content-Type": "application/json"
   };
 
   if (hasAuth) {
     headers["Authorization"] = `Bearer ${process.env.API_TOKEN}`;
   }
+ 
 
   const res = await fetch(url, {
-    headers
+    method: "POST",
+    headers,
+    body: JSON.stringify(params),
   });
-
-  console.log('API Request URL:', url.toString(),headers);
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
