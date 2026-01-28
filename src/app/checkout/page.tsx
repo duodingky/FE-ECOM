@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent, type InputHTMLAttributes } from "react";
 import Link from "next/link";
+import { z } from "zod";
 
 type Address = {
   firstName: string;
@@ -41,6 +42,30 @@ const emptyAddress: Address = {
 const baseFieldClass =
   "h-10 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none ring-zinc-300 focus:ring-2";
 
+const addressSchema = z.object({
+  firstName: z.string().trim().min(1, "First name is required."),
+  lastName: z.string().trim().min(1, "Last name is required."),
+  address1: z.string().trim().min(1, "Address is required."),
+  city: z.string().trim().min(1, "City is required."),
+  zipCode: z
+    .string()
+    .trim()
+    .min(1, "Zip code is required.")
+    .refine((value) => value.length === 0 || /^\d+$/.test(value), {
+      message: "Zip code must be a number.",
+    }),
+  province: z.string().trim().min(1, "Province is required."),
+  country: z.string().trim().min(1, "Country is required."),
+});
+
+const paymentSchema = z
+  .string()
+  .trim()
+  .min(1, "Select a payment method.")
+  .refine((value) => value.length === 0 || value === "cod", {
+    message: "Select a payment method.",
+  });
+
 function fieldClassName(hasError: boolean) {
   return [
     baseFieldClass,
@@ -48,29 +73,18 @@ function fieldClassName(hasError: boolean) {
   ].join(" ");
 }
 
-function validateAddress(address: Address): AddressErrors {
+function getAddressErrors(error: z.ZodError<Address>): AddressErrors {
   const nextErrors: AddressErrors = {};
 
-  if (!address.firstName.trim()) {
-    nextErrors.firstName = "First name is required.";
-  }
-  if (!address.lastName.trim()) {
-    nextErrors.lastName = "Last name is required.";
-  }
-  if (!address.address1.trim()) {
-    nextErrors.address1 = "Address is required.";
-  }
-  if (!address.city.trim()) {
-    nextErrors.city = "City is required.";
-  }
-  if (!address.zipCode.trim()) {
-    nextErrors.zipCode = "Zip code is required.";
-  }
-  if (!address.province.trim()) {
-    nextErrors.province = "Province is required.";
-  }
-  if (!address.country.trim()) {
-    nextErrors.country = "Country is required.";
+  for (const issue of error.issues) {
+    const field = issue.path[0];
+    if (typeof field !== "string") {
+      continue;
+    }
+    const key = field as keyof Address;
+    if (!nextErrors[key]) {
+      nextErrors[key] = issue.message;
+    }
   }
 
   return nextErrors;
@@ -318,9 +332,21 @@ export default function CheckoutPage() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const shippingErrors = validateAddress(shipping);
-    const billingErrors = sameAsShipping ? {} : validateAddress(billing);
-    const paymentError = paymentMethod ? "" : "Select a payment method.";
+    const shippingResult = addressSchema.safeParse(shipping);
+    const paymentResult = paymentSchema.safeParse(paymentMethod);
+
+    const shippingErrors = shippingResult.success
+      ? {}
+      : getAddressErrors(shippingResult.error);
+    const billingErrors = sameAsShipping
+      ? {}
+      : (() => {
+          const result = addressSchema.safeParse(billing);
+          return result.success ? {} : getAddressErrors(result.error);
+        })();
+    const paymentError = paymentResult.success
+      ? ""
+      : paymentResult.error.issues[0]?.message ?? "Select a payment method.";
 
     const hasErrors =
       hasAddressErrors(shippingErrors) ||
