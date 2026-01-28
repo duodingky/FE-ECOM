@@ -170,12 +170,12 @@ useEffect(() => {
               >
                 Back to shopping
               </Link>
-              <button
-                type="button"
+              <Link
+                href="/checkout"
                 className="inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800"
               >
                 Checkout
-              </button>
+              </Link>
             </div>
           </div>
         </>
