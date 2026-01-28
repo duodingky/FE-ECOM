@@ -34,7 +34,12 @@ export function Header() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+  const [isMounted, setIsMounted] = useState(false);
   const [q, setQ] = useState("");
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const nextQuery = searchParams.get("q") ?? "";
@@ -67,13 +72,21 @@ export function Header() {
             router.push(next ? `/search?q=${encodeURIComponent(next)}` : "/search");
           }}
         >
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search products…"
-            className="h-10 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm outline-none ring-zinc-300 focus:ring-2"
-            aria-label="Search products"
-          />
+          {isMounted ? (
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search products…"
+              className="h-10 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm outline-none ring-zinc-300 focus:ring-2"
+              aria-label="Search products"
+              autoComplete="off"
+            />
+          ) : (
+            <div
+              className="h-10 w-full rounded-md border border-zinc-200 bg-white"
+              aria-hidden="true"
+            />
+          )}
           <button
             type="submit"
             className="h-10 shrink-0 rounded-md bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800"
