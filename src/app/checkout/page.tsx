@@ -28,10 +28,10 @@ const addressSchema: yup.ObjectSchema<AddressFields> = yup
 const checkoutSchema: yup.ObjectSchema<CheckoutFormValues> = yup
   .object({
     billing_same: yup.boolean().default(false),
-    billing: yup.object().when("billing_same", {
-      is: true,
-      then: yup.object().notRequired(),
-      otherwise: addressSchema.required(),
+    billing: addressSchema.when("billing_same", {
+      is: (value: boolean) => value === true,
+      then: (schema) => schema.notRequired(),
+      otherwise: (schema) => schema.required(),
     }),
     shipping: addressSchema.required(),
     payment_method: yup
