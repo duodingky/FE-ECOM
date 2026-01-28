@@ -112,7 +112,11 @@ export default function CheckoutPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-6"
+        suppressHydrationWarning
+      >
         <AddressFormSection
           title="Shipping address"
           prefix="shipping"
