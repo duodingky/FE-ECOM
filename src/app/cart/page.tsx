@@ -53,7 +53,7 @@ export default function CartPage() {
           setStatus("idle");
       } catch (error) {
         if (isMounted && !controller.signal.aborted) {
-          console.error("Failed to load cart products", error);
+         // console.error("Failed to load cart products", error);
           setProducts([]);
           setStatus("error");
         }
