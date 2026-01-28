@@ -4,26 +4,12 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
-import type { pProducts } from "@/lib/type/catalog";
-
-type CartRow = {
-  id: string;
-  sku: string;
-  productName: string;
-  quantity: number;
-  price: number;
-};
+import type { CartProducts } from "@/lib/type/catalog";
+ 
+ 
 
 const SHIPPING_FEE = 100;
 
-function normalizePrice(price: unknown): number {
-  if (typeof price === "number" && Number.isFinite(price)) return price;
-  if (typeof price === "string") {
-    const numeric = Number(price.replace(/[^0-9.-]+/g, ""));
-    return Number.isFinite(numeric) ? numeric : 0;
-  }
-  return 0;
-}
 
 function formatCurrency(value: number): string {
   return value.toLocaleString("en-US", {
@@ -33,29 +19,27 @@ function formatCurrency(value: number): string {
 }
 
 export default function CartPage() {
-  const { cart } = useCart();
-  const [products, setProducts] = useState<pProducts[]>([]);
+  const { count, orderId } = useCart();
+  const [products, setProducts] = useState<CartProducts[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
 
-  const productIds = useMemo(() => Object.keys(cart), [cart]);
-
+ 
   useEffect(() => {
-    if (productIds.length === 0) {
-      setProducts([]);
+    if (orderId === '') {
       setStatus("idle");
       return;
     }
-
+   console.log("Fetching cart items for orderId:", orderId);
     let isMounted = true;
     const controller = new AbortController();
 
     const load = async () => {
       setStatus("loading");
       try {
-        const res = await fetch("/api/products/search", {
-          method: "POST",
+   
+        const res = await fetch(`/api/order/${orderId}`, {
+          method: "GET",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ ids: productIds }),
           signal: controller.signal,
         });
 
@@ -64,10 +48,9 @@ export default function CartPage() {
         }
 
         const data = await res.json();
-        if (isMounted) {
-          setProducts(Array.isArray(data) ? data : data?.data ?? []);
+          setProducts(data.orderItems);
+          console.log("Cart items:", data.orderItems);
           setStatus("idle");
-        }
       } catch (error) {
         if (isMounted && !controller.signal.aborted) {
           console.error("Failed to load cart products", error);
@@ -83,32 +66,16 @@ export default function CartPage() {
       isMounted = false;
       controller.abort();
     };
-  }, [productIds]);
+  }, [orderId]);
 
-  const rows = useMemo<CartRow[]>(() => {
-    if (productIds.length === 0) return [];
-    const byId = new Map(products.map((product) => [product.id, product]));
+useEffect(() => {
+  console.log("Products state updated:", products); // ✅ after React updates state
+}, [products]);
+  const subtotal = 0;
+  const shippingFee = 0;
+  const total = 0 ;
 
-    return productIds
-      .map((id) => {
-        const product = byId.get(id);
-        if (!product) return null;
-        return {
-          id,
-          sku: product.sku ?? product.id,
-          productName: product.productName,
-          quantity: cart[id] ?? 0,
-          price: normalizePrice(product.price),
-        };
-      })
-      .filter((row): row is CartRow => Boolean(row));
-  }, [cart, productIds, products]);
 
-  const subtotal = rows.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shippingFee = rows.length > 0 ? SHIPPING_FEE : 0;
-  const total = subtotal + shippingFee;
-
-  const isEmptyCart = productIds.length === 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -129,7 +96,7 @@ export default function CartPage() {
         </div>
       )}
 
-      {isEmptyCart ? (
+      {products.length===0? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-center">
           <p className="text-sm text-zinc-600">Your cart is empty.</p>
           <Link
@@ -153,7 +120,7 @@ export default function CartPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-200">
-                {rows.map((item) => {
+                {products.map((item) => {
                   const amount = item.price * item.quantity;
                   return (
                     <tr key={item.id}>

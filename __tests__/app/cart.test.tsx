@@ -11,10 +11,8 @@ describe("Cart page", () => {
 
   beforeEach(() => {
     (useCart as jest.Mock).mockReturnValue({
-      cart: { p1: 2 },
       count: 2,
       add: jest.fn(),
-      remove: jest.fn(),
       setQuantity: jest.fn(),
       clear: jest.fn(),
     });
