@@ -49,6 +49,7 @@ export function AddressFormSection({
           id={fieldId("first-name")}
           label="First name"
           fullWidth
+          inputProps={{ suppressHydrationWarning: true }}
           {...register(`${prefix}.first_name` as const)}
           error={Boolean(sectionErrors?.first_name)}
           helperText={sectionErrors?.first_name?.message}
@@ -57,6 +58,7 @@ export function AddressFormSection({
           id={fieldId("last-name")}
           label="Last name"
           fullWidth
+          inputProps={{ suppressHydrationWarning: true }}
           {...register(`${prefix}.last_name` as const)}
           error={Boolean(sectionErrors?.last_name)}
           helperText={sectionErrors?.last_name?.message}
@@ -66,6 +68,7 @@ export function AddressFormSection({
           className="sm:col-span-2"
           label="Address"
           fullWidth
+          inputProps={{ suppressHydrationWarning: true }}
           {...register(`${prefix}.address1` as const)}
           error={Boolean(sectionErrors?.address1)}
           helperText={sectionErrors?.address1?.message}
@@ -114,7 +117,12 @@ export function AddressFormSection({
           id={fieldId("zip-code")}
           label="Zip code"
           fullWidth
-          inputProps={{ inputMode: "numeric", pattern: "[0-9]*", maxLength: 6 }}
+          inputProps={{
+            inputMode: "numeric",
+            pattern: "[0-9]*",
+            maxLength: 6,
+            suppressHydrationWarning: true,
+          }}
           {...register(`${prefix}.zip_code` as const)}
           error={Boolean(sectionErrors?.zip_code)}
           helperText={sectionErrors?.zip_code?.message}
