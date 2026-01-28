@@ -6,7 +6,14 @@ import type {
   UseFormRegister,
 } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { MenuItem, TextField } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import type { CheckoutFormValues } from "@/lib/type/checkout";
 
 type AddressFormSectionProps = {
@@ -62,28 +69,41 @@ export function AddressFormSection({
         <Controller
           name={`${prefix}.city` as const}
           control={control}
-          render={({ field }) => (
-            <TextField
-              select
-              label="City"
-              fullWidth
-              {...field}
-              value={field.value ?? ""}
-              slotProps={{
-                inputLabel: { shrink: true },
-                select: { displayEmpty: true },
-              }}
-              error={Boolean(sectionErrors?.city)}
-              helperText={sectionErrors?.city?.message}
-            >
-              <MenuItem value="">Select city</MenuItem>
-              {CITY_OPTIONS.map((city) => (
-                <MenuItem key={city} value={city}>
-                  {city}
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
+          render={({ field }) => {
+            const { ref, ...fieldProps } = field;
+            return (
+              <FormControl fullWidth error={Boolean(sectionErrors?.city)}>
+                <InputLabel shrink id={`${prefix}-city-label`}>
+                  City
+                </InputLabel>
+                <Select
+                  {...fieldProps}
+                  labelId={`${prefix}-city-label`}
+                  label="City"
+                  displayEmpty
+                  value={field.value ?? ""}
+                  inputRef={ref}
+                  renderValue={(selected) =>
+                    selected ? (
+                      selected
+                    ) : (
+                      <span className="text-zinc-400">Select city</span>
+                    )
+                  }
+                >
+                  <MenuItem value="" disabled>
+                    Select city
+                  </MenuItem>
+                  {CITY_OPTIONS.map((city) => (
+                    <MenuItem key={city} value={city}>
+                      {city}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{sectionErrors?.city?.message}</FormHelperText>
+              </FormControl>
+            );
+          }}
         />
         <TextField
           label="Zip code"
@@ -96,54 +116,84 @@ export function AddressFormSection({
         <Controller
           name={`${prefix}.province` as const}
           control={control}
-          render={({ field }) => (
-            <TextField
-              select
-              label="Province"
-              fullWidth
-              {...field}
-              value={field.value ?? ""}
-              slotProps={{
-                inputLabel: { shrink: true },
-                select: { displayEmpty: true },
-              }}
-              error={Boolean(sectionErrors?.province)}
-              helperText={sectionErrors?.province?.message}
-            >
-              <MenuItem value="">Select province</MenuItem>
-              {PROVINCE_OPTIONS.map((province) => (
-                <MenuItem key={province} value={province}>
-                  {province}
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
+          render={({ field }) => {
+            const { ref, ...fieldProps } = field;
+            return (
+              <FormControl fullWidth error={Boolean(sectionErrors?.province)}>
+                <InputLabel shrink id={`${prefix}-province-label`}>
+                  Province
+                </InputLabel>
+                <Select
+                  {...fieldProps}
+                  labelId={`${prefix}-province-label`}
+                  label="Province"
+                  displayEmpty
+                  value={field.value ?? ""}
+                  inputRef={ref}
+                  renderValue={(selected) =>
+                    selected ? (
+                      selected
+                    ) : (
+                      <span className="text-zinc-400">Select province</span>
+                    )
+                  }
+                >
+                  <MenuItem value="" disabled>
+                    Select province
+                  </MenuItem>
+                  {PROVINCE_OPTIONS.map((province) => (
+                    <MenuItem key={province} value={province}>
+                      {province}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>
+                  {sectionErrors?.province?.message}
+                </FormHelperText>
+              </FormControl>
+            );
+          }}
         />
         <Controller
           name={`${prefix}.country` as const}
           control={control}
-          render={({ field }) => (
-            <TextField
-              select
-              label="Country"
-              fullWidth
-              {...field}
-              value={field.value ?? ""}
-              slotProps={{
-                inputLabel: { shrink: true },
-                select: { displayEmpty: true },
-              }}
-              error={Boolean(sectionErrors?.country)}
-              helperText={sectionErrors?.country?.message}
-            >
-              <MenuItem value="">Select country</MenuItem>
-              {COUNTRY_OPTIONS.map((country) => (
-                <MenuItem key={country} value={country}>
-                  {country}
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
+          render={({ field }) => {
+            const { ref, ...fieldProps } = field;
+            return (
+              <FormControl fullWidth error={Boolean(sectionErrors?.country)}>
+                <InputLabel shrink id={`${prefix}-country-label`}>
+                  Country
+                </InputLabel>
+                <Select
+                  {...fieldProps}
+                  labelId={`${prefix}-country-label`}
+                  label="Country"
+                  displayEmpty
+                  value={field.value ?? ""}
+                  inputRef={ref}
+                  renderValue={(selected) =>
+                    selected ? (
+                      selected
+                    ) : (
+                      <span className="text-zinc-400">Select country</span>
+                    )
+                  }
+                >
+                  <MenuItem value="" disabled>
+                    Select country
+                  </MenuItem>
+                  {COUNTRY_OPTIONS.map((country) => (
+                    <MenuItem key={country} value={country}>
+                      {country}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>
+                  {sectionErrors?.country?.message}
+                </FormHelperText>
+              </FormControl>
+            );
+          }}
         />
       </div>
     </section>
