@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
 import Image from 'next/image'
 
@@ -34,8 +34,12 @@ export function Header() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const initialQ = useMemo(() => searchParams.get("q") ?? "", [searchParams]);
-  const [q, setQ] = useState(initialQ);
+  const [q, setQ] = useState("");
+
+  useEffect(() => {
+    const nextQuery = searchParams.get("q") ?? "";
+    setQ((prev) => (prev === nextQuery ? prev : nextQuery));
+  }, [searchParams]);
 
   return (
     <header className="border-b border-zinc-200 bg-white">
