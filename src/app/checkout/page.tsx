@@ -156,6 +156,7 @@ export default function CheckoutPage() {
             type="submit"
             variant="contained"
             disabled={isSubmitting}
+            suppressHydrationWarning
           >
             {isSubmitting ? "Submitting..." : "Place order"}
           </Button>
