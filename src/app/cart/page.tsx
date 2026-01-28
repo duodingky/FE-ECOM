@@ -1,6 +1,6 @@
 // app/cart/page.tsx
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
@@ -22,8 +22,11 @@ export default function CartPage() {
   const { count, orderId } = useCart();
   const [products, setProducts] = useState<CartProducts[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const router = useRouter();
 
- 
+  const gotopage = (page:string) => () => {
+    router.push(`/${page}`);
+  }
   useEffect(() => {
     if (orderId === '') {
       setStatus("idle");
@@ -171,6 +174,7 @@ useEffect(() => {
                 Back to shopping
               </Link>
               <button
+                onClick={gotopage('checkout')}
                 type="button"
                 className="inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800"
               >
