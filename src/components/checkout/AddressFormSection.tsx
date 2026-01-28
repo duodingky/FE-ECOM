@@ -68,7 +68,9 @@ export function AddressFormSection({
               label="City"
               fullWidth
               SelectProps={{ displayEmpty: true }}
+              InputLabelProps={{ shrink: true }}
               {...field}
+              value={field.value ?? ""}
               error={Boolean(sectionErrors?.city)}
               helperText={sectionErrors?.city?.message}
             >
@@ -98,7 +100,9 @@ export function AddressFormSection({
               label="Province"
               fullWidth
               SelectProps={{ displayEmpty: true }}
+              InputLabelProps={{ shrink: true }}
               {...field}
+              value={field.value ?? ""}
               error={Boolean(sectionErrors?.province)}
               helperText={sectionErrors?.province?.message}
             >
@@ -120,7 +124,9 @@ export function AddressFormSection({
               label="Country"
               fullWidth
               SelectProps={{ displayEmpty: true }}
+              InputLabelProps={{ shrink: true }}
               {...field}
+              value={field.value ?? ""}
               error={Boolean(sectionErrors?.country)}
               helperText={sectionErrors?.country?.message}
             >
