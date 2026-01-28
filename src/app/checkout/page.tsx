@@ -4,7 +4,7 @@ import { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Alert, Button } from "@mui/material";
+import { Alert, Button, Checkbox, FormControlLabel } from "@mui/material";
 import { AddressFormSection } from "@/components/checkout/AddressFormSection";
 import { PaymentFormSection } from "@/components/checkout/PaymentFormSection";
 import type { AddressFields, CheckoutFormValues } from "@/lib/type/checkout";
@@ -27,7 +27,12 @@ const addressSchema: yup.ObjectSchema<AddressFields> = yup
 
 const checkoutSchema: yup.ObjectSchema<CheckoutFormValues> = yup
   .object({
-    billing: addressSchema.required(),
+    billing_same: yup.boolean().default(false),
+    billing: yup.object().when("billing_same", {
+      is: true,
+      then: yup.object().notRequired(),
+      otherwise: addressSchema.required(),
+    }),
     shipping: addressSchema.required(),
     payment_method: yup
       .string()
@@ -47,6 +52,7 @@ const defaultAddress: AddressFields = {
 };
 
 const defaultValues: CheckoutFormValues = {
+  billing_same: false,
   billing: { ...defaultAddress },
   shipping: { ...defaultAddress },
   payment_method: "COD",
@@ -63,18 +69,26 @@ export default function CheckoutPage() {
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<CheckoutFormValues>({
     resolver: yupResolver(checkoutSchema),
     defaultValues,
   });
 
+  const billingSame = watch("billing_same");
+
   const onSubmit = async (values: CheckoutFormValues) => {
     setSubmissionStatus("idle");
     setSubmissionMessage("");
 
+    const payload: CheckoutFormValues = {
+      ...values,
+      billing: values.billing_same ? values.shipping : values.billing,
+    };
+
     try {
-      const result = await submitCheckout(values);
+      const result = await submitCheckout(payload);
       if (result.ok) {
         setSubmissionStatus("success");
         setSubmissionMessage(result.message);
@@ -100,20 +114,29 @@ export default function CheckoutPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <AddressFormSection
-          title="Billing address"
-          prefix="billing"
-          register={register}
-          control={control}
-          errors={errors}
-        />
-
-        <AddressFormSection
           title="Shipping address"
           prefix="shipping"
           register={register}
           control={control}
           errors={errors}
         />
+
+        <section className="rounded-xl border border-zinc-200 bg-white p-6">
+          <FormControlLabel
+            control={<Checkbox {...register("billing_same")} />}
+            label="Billing is same as shipping"
+          />
+        </section>
+
+        {!billingSame ? (
+          <AddressFormSection
+            title="Billing address"
+            prefix="billing"
+            register={register}
+            control={control}
+            errors={errors}
+          />
+        ) : null}
 
         <PaymentFormSection control={control} errors={errors} />
 

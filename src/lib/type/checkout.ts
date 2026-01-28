@@ -11,6 +11,7 @@ export type AddressFields = {
 export type PaymentMethod = "COD";
 
 export type CheckoutFormValues = {
+  billing_same: boolean;
   billing: AddressFields;
   shipping: AddressFields;
   payment_method: PaymentMethod;
