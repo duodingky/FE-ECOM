@@ -67,10 +67,12 @@ export function AddressFormSection({
               select
               label="City"
               fullWidth
-              SelectProps={{ displayEmpty: true }}
-              InputLabelProps={{ shrink: true }}
               {...field}
               value={field.value ?? ""}
+              slotProps={{
+                inputLabel: { shrink: true },
+                select: { displayEmpty: true },
+              }}
               error={Boolean(sectionErrors?.city)}
               helperText={sectionErrors?.city?.message}
             >
@@ -99,10 +101,12 @@ export function AddressFormSection({
               select
               label="Province"
               fullWidth
-              SelectProps={{ displayEmpty: true }}
-              InputLabelProps={{ shrink: true }}
               {...field}
               value={field.value ?? ""}
+              slotProps={{
+                inputLabel: { shrink: true },
+                select: { displayEmpty: true },
+              }}
               error={Boolean(sectionErrors?.province)}
               helperText={sectionErrors?.province?.message}
             >
@@ -123,10 +127,12 @@ export function AddressFormSection({
               select
               label="Country"
               fullWidth
-              SelectProps={{ displayEmpty: true }}
-              InputLabelProps={{ shrink: true }}
               {...field}
               value={field.value ?? ""}
+              slotProps={{
+                inputLabel: { shrink: true },
+                select: { displayEmpty: true },
+              }}
               error={Boolean(sectionErrors?.country)}
               helperText={sectionErrors?.country?.message}
             >
