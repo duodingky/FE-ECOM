@@ -36,6 +36,7 @@ export function AddressFormSection({
   errors,
 }: AddressFormSectionProps) {
   const sectionErrors = errors[prefix];
+  const fieldId = (name: string) => `${prefix}-${name}`;
 
   return (
     <section className="rounded-xl border border-zinc-200 bg-white p-6">
@@ -45,6 +46,7 @@ export function AddressFormSection({
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <TextField
+          id={fieldId("first-name")}
           label="First name"
           fullWidth
           {...register(`${prefix}.first_name` as const)}
@@ -52,6 +54,7 @@ export function AddressFormSection({
           helperText={sectionErrors?.first_name?.message}
         />
         <TextField
+          id={fieldId("last-name")}
           label="Last name"
           fullWidth
           {...register(`${prefix}.last_name` as const)}
@@ -59,6 +62,7 @@ export function AddressFormSection({
           helperText={sectionErrors?.last_name?.message}
         />
         <TextField
+          id={fieldId("address1")}
           className="sm:col-span-2"
           label="Address"
           fullWidth
@@ -73,12 +77,13 @@ export function AddressFormSection({
             const { ref, ...fieldProps } = field;
             return (
               <FormControl fullWidth error={Boolean(sectionErrors?.city)}>
-                <InputLabel shrink id={`${prefix}-city-label`}>
+                <InputLabel shrink id={fieldId("city-label")}>
                   City
                 </InputLabel>
                 <Select
                   {...fieldProps}
-                  labelId={`${prefix}-city-label`}
+                  id={fieldId("city")}
+                  labelId={fieldId("city-label")}
                   label="City"
                   displayEmpty
                   value={field.value ?? ""}
@@ -106,6 +111,7 @@ export function AddressFormSection({
           }}
         />
         <TextField
+          id={fieldId("zip-code")}
           label="Zip code"
           fullWidth
           inputProps={{ inputMode: "numeric", pattern: "[0-9]*", maxLength: 6 }}
@@ -120,12 +126,13 @@ export function AddressFormSection({
             const { ref, ...fieldProps } = field;
             return (
               <FormControl fullWidth error={Boolean(sectionErrors?.province)}>
-                <InputLabel shrink id={`${prefix}-province-label`}>
+                <InputLabel shrink id={fieldId("province-label")}>
                   Province
                 </InputLabel>
                 <Select
                   {...fieldProps}
-                  labelId={`${prefix}-province-label`}
+                  id={fieldId("province")}
+                  labelId={fieldId("province-label")}
                   label="Province"
                   displayEmpty
                   value={field.value ?? ""}
@@ -161,12 +168,13 @@ export function AddressFormSection({
             const { ref, ...fieldProps } = field;
             return (
               <FormControl fullWidth error={Boolean(sectionErrors?.country)}>
-                <InputLabel shrink id={`${prefix}-country-label`}>
+                <InputLabel shrink id={fieldId("country-label")}>
                   Country
                 </InputLabel>
                 <Select
                   {...fieldProps}
-                  labelId={`${prefix}-country-label`}
+                  id={fieldId("country")}
+                  labelId={fieldId("country-label")}
                   label="Country"
                   displayEmpty
                   value={field.value ?? ""}

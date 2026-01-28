@@ -123,7 +123,12 @@ export default function CheckoutPage() {
 
         <section className="rounded-xl border border-zinc-200 bg-white p-6">
           <FormControlLabel
-            control={<Checkbox {...register("billing_same")} />}
+            control={
+              <Checkbox
+                id="billing-same-checkbox"
+                {...register("billing_same")}
+              />
+            }
             label="Billing is same as shipping"
           />
         </section>
